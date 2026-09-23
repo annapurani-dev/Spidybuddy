@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
+        android:icon="@drawable/spiderman_clean"
         android:allowBackup="true"
         android:label="Spiderman Buddy"
         android:supportsRtl="true"

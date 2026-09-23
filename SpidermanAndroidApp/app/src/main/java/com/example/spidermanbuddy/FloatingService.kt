@@ -24,7 +24,7 @@ class FloatingService : Service() {
         super.onCreate()
 
         floatingView = ImageView(this).apply {
-            setImageResource(android.R.drawable.sym_def_app_icon) 
+          setImageResource(R.drawable.spiderman_clean)
         }
 
         params = WindowManager.LayoutParams(

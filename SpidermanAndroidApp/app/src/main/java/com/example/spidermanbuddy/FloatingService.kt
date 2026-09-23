@@ -6,7 +6,6 @@ import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
@@ -25,7 +24,6 @@ class FloatingService : Service() {
         super.onCreate()
 
         floatingView = ImageView(this).apply {
-            // In a real app we'd load the spiderman_clean.png from res/drawable
             setImageResource(android.R.drawable.sym_def_app_icon) 
         }
 
@@ -47,16 +45,25 @@ class FloatingService : Service() {
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         windowManager.addView(floatingView, params)
 
-        // Simple dragging logic
+        // Dragging and Double-tap logic
         floatingView.setOnTouchListener(object : View.OnTouchListener {
             private var initialX = 0
             private var initialY = 0
             private var initialTouchX = 0f
             private var initialTouchY = 0f
+            private var lastTouchTime: Long = 0
 
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 when (event?.action) {
                     MotionEvent.ACTION_DOWN -> {
+                        val clickTime = System.currentTimeMillis()
+                        if (clickTime - lastTouchTime < 300) {
+                            // Double tap! Stop the service
+                            stopSelf()
+                            return true
+                        }
+                        lastTouchTime = clickTime
+
                         initialX = params.x
                         initialY = params.y
                         initialTouchX = event.rawX
